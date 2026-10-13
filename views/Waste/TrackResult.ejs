@@ -1,0 +1,30 @@
+<div class="mx-auto w-full max-w-[1320px] px-4 sm:px-6 mt-12 mb-12">
+    <section class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 shadow-lg">
+        <header class="bg-green-700 px-12 py-4 text-white bg-cyan-700"><h3 class="mb-0">Complaint Tracking</h3></header>
+        <div class="p-6">
+            <section class="mb-4">
+                <h4 class="text-blue-700">Complaint Information</h4><hr>
+                <p><strong>Complaint ID:</strong> #<%= complaint.ComplaintID %></p>
+                <p><strong>Location:</strong> <%= complaint.Location %></p>
+                <p><strong>Waste Type:</strong> <%= complaint.WasteType %></p>
+                <p><strong>Description:</strong> <%= complaint.Description %></p>
+                <p><strong>Report Date:</strong> <%= dateLabel(complaint.ReportDate) %></p>
+            </section>
+            <section class="mb-4">
+                <h4 class="text-blue-700">Complaint Status</h4><hr>
+                <div class="status-timeline">
+                    <% statuses.forEach((status, index) => { %>
+                        <% const completed = statuses.indexOf(complaint.Status) >= index; %>
+                        <div class="status-step <%= completed ? 'completed' : '' %> "><div class="status-circle"><%= index + 1 %></div><div class="status-label"><%= status %></div></div>
+                        <% if (index < statuses.length - 1) { %><div class="status-line <%= statuses.indexOf(complaint.Status) > index ? 'completed-line' : '' %> "></div><% } %>
+                    <% }); %>
+                </div>
+            </section>
+            <div class="current-status"><strong>Current Status:</strong> <span><%= complaint.Status %></span></div>
+        </div>
+        <footer class="border-t border-slate-200 px-12 py-4">
+            <a href="/Waste/Track" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-blue-700 text-white hover:bg-blue-800 focus-visible:ring-blue-600">Track Another Complaint</a>
+            <a href="/Waste/MyComplaints" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-slate-600 text-white hover:bg-slate-700 focus-visible:ring-slate-500">My Complaints</a>
+        </footer>
+    </section>
+</div>

@@ -1,0 +1,42 @@
+<section class="hero">
+    <div class="hero-content">
+        <p>🌊 Together for a Cleaner Tomorrow</p>
+        <h1>Waste Management <span>System</span></h1>
+        <p>Report waste, track collection, and help keep your community clean and green.</p>
+        <div class="hero-buttons">
+            <a href="/Waste/Report" class="hero-btn primary-btn">🗑️ Report Waste →</a>
+            <a href="/Waste/Track" class="hero-btn secondary-btn">📍 Track Complaint →</a>
+        </div>
+        <% if (!session.citizenId) { %>
+            <p class="mt-4 mb-0">New here? <a href="/Citizen/Register" class="text-white font-bold">Create a free account</a> to report and track waste in your area.</p>
+        <% } else { %>
+            <p class="mt-4 mb-0"><a href="/Waste/MyComplaints" class="text-white font-bold">View your reported complaints</a> or <a href="/Waste/Report" class="text-white font-bold">report another issue</a>.</p>
+        <% } %>
+    </div>
+</section>
+<section class="mx-auto w-full max-w-[1320px] px-4 sm:px-6 mt-12 mb-12">
+    <h2 class="text-center mb-4">Waste Management Statistics</h2>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-12 text-center">
+        <% const values = [["Total Complaints", stats.total], ["Pending", stats.pending], ["In Progress", stats.inProgress], ["Resolved", stats.resolved]]; %>
+        <% values.forEach(([label, value]) => { %>
+            <div class="md:col-span-3 mb-3"><div class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 shadow-lg p-6"><h5><%= label %></h5><h2><%= value %></h2></div></div>
+        <% }); %>
+    </div>
+</section>
+<div class="wave"></div>
+<section class="section">
+    <div class="section-label">OUR SERVICES</div>
+    <h2>How We Help</h2>
+    <p class="section-description">Our platform makes waste management easier, faster and more transparent for everyone.</p>
+    <div class="service-cards">
+        <article class="service-card"><div class="service-icon">🗑️</div><h3>Report Waste</h3><p>Report uncollected waste from your area.</p><a href="/Waste/Report" class="service-link">Report waste →</a></article>
+        <article class="service-card"><div class="service-icon">📍</div><h3>Track Collection</h3><p>Check the status of your waste complaint.</p><a href="/Waste/Track" class="service-link">Track a complaint →</a></article>
+        <article class="service-card"><div class="service-icon">🌱</div><h3>Clean Environment</h3><p>Help create a cleaner and healthier community.</p><a href="/Home/About" class="service-link">Learn more →</a></article>
+    </div>
+</section>
+<section class="stats">
+    <div class="stat"><h2>1000+</h2><p>Active Users</p></div>
+    <div class="stat"><h2>500+</h2><p>Complaints Resolved</p></div>
+    <div class="stat"><h2>200+</h2><p>Tons of Waste Collected</p></div>
+    <div class="stat"><h2>🌍</h2><p>Cleaner Greener Tomorrow</p></div>
+</section>

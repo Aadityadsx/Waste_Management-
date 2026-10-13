@@ -1,0 +1,51 @@
+<div class="mx-auto w-full max-w-[1320px] px-4 sm:px-6" style="max-width:850px;margin:40px auto 50px">
+    <div class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 shadow-xl" style="border-radius:20px;overflow:hidden">
+        <header style="background:linear-gradient(135deg,#0f766e,#16a34a);color:white;padding:25px">
+            <h2 style="margin:0">♻️ Report Waste</h2>
+            <p style="margin:8px 0 0">Report a waste problem in your area.</p>
+        </header>
+        <div class="p-6 md:p-12">
+            <% if (errorMessage) { %><div class="rounded-lg border p-6 border-red-200 bg-red-50 text-red-800"><%= errorMessage %></div><% } %>
+            <form method="post" action="/Waste/Report" id="reportForm">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <div class="form-group"><label for="Name">Name</label><input class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" id="Name" name="Name" value="<%= values?.Name || session.citizenName || '' %>" placeholder="Enter your name" autocomplete="name" required></div>
+                <div class="form-group"><label for="Location">Location</label><input class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" id="Location" name="Location" value="<%= values?.Location || '' %>" placeholder="Enter waste location" required></div>
+                <div class="form-group"><label for="WasteType">Waste Type</label>
+                    <select class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" id="WasteType" name="WasteType" required>
+                        <option value="">Select Waste Type</option>
+                        <% wasteTypes.forEach(type => { %><option value="<%= type %>" <%= values?.WasteType === type ? 'selected' : '' %>><%= type %></option><% }); %>
+                    </select>
+                </div>
+                <div class="form-group"><label for="Description">Description</label><textarea class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" id="Description" name="Description" rows="5" placeholder="Describe the waste problem" required><%= values?.Description || '' %></textarea></div>
+                <hr class="my-4">
+                <h4 class="text-green-700">📍 Complaint Location</h4>
+                <p class="text-slate-500">Capture your current GPS location to help workers find the waste. Location access is optional.</p>
+                <button type="button" id="getLocationButton" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 border border-green-700 bg-white text-green-800 hover:bg-green-50 focus-visible:ring-green-600">📍 Capture My Location</button>
+                <p id="locationMessage" class="mt-2 mb-0" role="status" aria-live="polite"></p>
+                <input type="hidden" id="Latitude" name="Latitude" value="<%= values?.Latitude || '' %>">
+                <input type="hidden" id="Longitude" name="Longitude" value="<%= values?.Longitude || '' %>">
+                <button type="submit" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-blue-700 text-white hover:bg-blue-800 focus-visible:ring-blue-600 px-6 py-3 text-lg w-full mt-4">Submit Complaint</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("getLocationButton").addEventListener("click", function () {
+        const message = document.getElementById("locationMessage");
+        message.textContent = "Getting your location...";
+        if (!navigator.geolocation) {
+            message.textContent = "GPS is not supported by this browser.";
+            message.className = "mt-2 text-red-600";
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(function (position) {
+            document.getElementById("Latitude").value = position.coords.latitude;
+            document.getElementById("Longitude").value = position.coords.longitude;
+            message.textContent = "✓ Location captured successfully";
+            message.className = "mt-2 text-green-700";
+        }, function () {
+            message.textContent = "Unable to capture location. Please allow location permission.";
+            message.className = "mt-2 text-red-600";
+        }, { enableHighAccuracy: true, timeout: 10000 });
+    });
+</script>

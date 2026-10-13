@@ -1,0 +1,16 @@
+<div class="mx-auto w-full max-w-[1320px] px-4 sm:px-6 mt-4" style="max-width:500px">
+    <div class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 shadow-lg p-6">
+        <h2 class="text-center mb-3">Citizen Registration</h2>
+        <p class="text-center text-slate-500">Create an account to get started.</p>
+        <% if (errorMessage) { %><div class="rounded-lg border p-6 border-red-200 bg-red-50 text-red-800"><%= errorMessage %></div><% } %>
+        <form method="post" action="/Citizen/Register">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group mb-3"><label for="fullName">Full Name</label><input type="text" name="fullName" id="fullName" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Enter your full name" autocomplete="name" required></div>
+            <div class="form-group mb-3"><label for="email">Email Address</label><input type="email" name="email" id="email" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Enter your email" autocomplete="email" required></div>
+            <div class="form-group mb-3"><label for="password">Password</label><input type="password" name="password" id="password" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Create a password" minlength="8" autocomplete="new-password" required><small class="mt-1 block text-sm text-slate-500">Use at least 8 characters.</small></div>
+            <button type="submit" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-green-700 text-white hover:bg-green-800 focus-visible:ring-green-600 w-full">Register</button>
+        </form>
+        <div class="text-center mt-3"><a href="/Citizen/Login">Already have an account? Sign in</a></div>
+        <div class="text-center mt-2"><a href="/">Back to Home</a></div>
+    </div>
+</div>

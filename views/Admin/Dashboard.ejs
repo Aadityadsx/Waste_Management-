@@ -1,0 +1,60 @@
+<div class="mx-auto w-full max-w-[1320px] px-4 sm:px-6" style="margin-top:40px;margin-bottom:50px">
+    <header class="flex justify-between items-center mb-4">
+        <div><h1 style="color:#1b5e20;margin-bottom:5px">♻️ Admin Dashboard</h1><p class="text-slate-500">Manage waste complaints and assign workers</p></div>
+        <a href="/Admin/Logout" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-red-700 text-white hover:bg-red-800 focus-visible:ring-red-600">Logout</a>
+    </header>
+    <% if (flash.successMessage) { %><div class="rounded-lg border p-6 border-green-200 bg-green-50 text-green-800"><%= flash.successMessage %></div><% } %>
+    <% if (flash.errorMessage) { %><div class="rounded-lg border p-6 border-red-200 bg-red-50 text-red-800"><%= flash.errorMessage %></div><% } %>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-12">
+        <% const cards = [
+            { label: "Total Complaints", value: stats.total, color: "#1b5e20" },
+            { label: "Pending", value: stats.pending, color: "#f57c00" },
+            { label: "In Progress", value: stats.inProgress, color: "#1976d2" },
+            { label: "Resolved", value: stats.resolved, color: "#2e7d32" }
+        ]; %>
+        <% cards.forEach(function (card) { %>
+            <div class="md:col-span-3">
+                <div class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 p-6 mb-3" style="border-radius:15px">
+                    <h5><%= card.label %></h5>
+                    <h2 style="color:<%= card.color %>"><%= card.value %></h2>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-12 mt-2">
+        <div class="md:col-span-6"><div class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 p-6 mb-3" style="border-radius:15px"><h5>⭐ Total Feedbacks</h5><h2 class="text-green-700"><%= feedbacks.length %></h2></div></div>
+        <div class="md:col-span-6"><div class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 p-6 mb-3" style="border-radius:15px"><h5>⭐ Average Rating</h5><h2 class="text-amber-600"><%= averageRating.toFixed(1) %> / 5</h2></div></div>
+    </div>
+    <section class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 p-6 md:p-6 mt-3">
+        <h3 class="text-green-700 mb-4">📋 Waste Complaints</h3>
+        <% if (!complaints.length) { %><div class="rounded-lg border p-6 border-sky-200 bg-sky-50 text-sky-800">No waste complaints have been reported yet.</div><% } else { %>
+        <div class="overflow-x-auto"><table class="w-full border-collapse text-left text-sm align-middle">
+            <thead class="bg-green-50 text-green-900"><tr><th>ID</th><th>Citizen</th><th>Location</th><th>Waste Type</th><th>Status</th><th>Assign Worker</th><th>Update Status</th></tr></thead>
+            <tbody><% complaints.forEach(complaint => { %><tr>
+                <td>#<%= complaint.ComplaintID %></td><td><%= complaint.Name %></td><td><%= complaint.Location %></td><td><%= complaint.WasteType %></td><td><strong><%= complaint.Status %></strong></td>
+                <td><form method="post" action="/Admin/AssignWorker">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="complaintId" value="<%= complaint.ComplaintID %>">
+                    <select name="workerId" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" required><option value="">Select Worker</option><% workers.forEach(worker => { %><option value="<%= worker.WorkerID %>" <%= complaint.WorkerID === worker.WorkerID ? "selected" : "" %>><%= worker.FullName %></option><% }); %></select>
+                    <button class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-green-700 text-white hover:bg-green-800 focus-visible:ring-green-600 px-3 py-1.5 text-sm w-full mt-2" type="submit">Assign</button>
+                </form></td>
+                <td><form method="post" action="/Admin/UpdateStatus">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="complaintId" value="<%= complaint.ComplaintID %>">
+                    <select name="status" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200"><% ["Pending", "In Progress", "Collected", "Resolved"].forEach(status => { %><option value="<%= status %>" <%= complaint.Status === status ? "selected" : "" %>><%= status %></option><% }); %></select>
+                    <button class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-blue-700 text-white hover:bg-blue-800 focus-visible:ring-blue-600 px-3 py-1.5 text-sm w-full mt-2" type="submit">Update</button>
+                </form></td>
+            </tr><% }); %></tbody>
+        </table></div><% } %>
+    </section>
+    <section class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 p-6 md:p-6 mt-4">
+        <h3 class="text-green-700 mb-4">⭐ Citizen Feedback</h3>
+        <% if (!feedbacks.length) { %><div class="rounded-lg border p-6 border-sky-200 bg-sky-50 text-sky-800">No feedback has been submitted yet.</div><% } else { %>
+        <div class="overflow-x-auto"><table class="w-full border-collapse text-left text-sm">
+            <thead class="bg-amber-50 text-amber-900"><tr><th>Feedback ID</th><th>Complaint ID</th><th>Citizen ID</th><th>Rating</th><th>Comments</th><th>Date</th></tr></thead>
+            <tbody><% feedbacks.forEach(feedback => { %><tr>
+                <td><%= feedback.FeedbackID %></td><td>#<%= feedback.ComplaintID %></td><td><%= feedback.CitizenID %></td>
+                <td><%= "⭐".repeat(feedback.Rating) %><%= "☆".repeat(5 - feedback.Rating) %></td>
+                <td><%= feedback.Comments || "No comments" %></td><td><%= dateLabel(feedback.FeedbackDate) %></td>
+            </tr><% }); %></tbody>
+        </table></div><% } %>
+    </section>
+</div>

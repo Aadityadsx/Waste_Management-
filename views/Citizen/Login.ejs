@@ -1,0 +1,15 @@
+<div class="mx-auto w-full max-w-[1320px] px-4 sm:px-6 mt-4" style="max-width:500px">
+    <div class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 shadow-lg p-6">
+        <h2 class="text-center mb-3">Citizen Login</h2>
+        <p class="text-center text-slate-500">Sign in to your citizen account.</p>
+        <% if (errorMessage) { %><div class="rounded-lg border p-6 border-red-200 bg-red-50 text-red-800"><%= errorMessage %></div><% } %>
+        <form method="post" action="/Citizen/Login">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group mb-3"><label for="email">Email Address</label><input type="email" name="email" id="email" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Enter your email" autocomplete="email" required></div>
+            <div class="form-group mb-3"><label for="password">Password</label><input type="password" name="password" id="password" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Enter your password" autocomplete="current-password" required></div>
+            <button type="submit" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-green-700 text-white hover:bg-green-800 focus-visible:ring-green-600 w-full">Login</button>
+        </form>
+        <div class="text-center mt-3"><a href="/Citizen/Register">Create a new account</a></div>
+        <div class="text-center mt-2"><a href="/">Back to Home</a></div>
+    </div>
+</div>

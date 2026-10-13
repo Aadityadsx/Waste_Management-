@@ -1,0 +1,17 @@
+<div class="mx-auto w-full max-w-[1320px] px-4 sm:px-6" style="max-width:600px;margin:50px auto">
+    <div class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 shadow-xl" style="border-radius:20px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#166534,#22c55e);color:white;padding:25px"><h2 style="margin:0">👷 Worker Registration</h2><p style="margin:8px 0 0">Create your worker account</p></div>
+        <div class="p-6 md:p-12">
+            <% if (errorMessage) { %><div class="rounded-lg border p-6 border-red-200 bg-red-50 text-red-800"><%= errorMessage %></div><% } %>
+            <form method="post" action="/Worker/Register">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <div class="form-group"><label for="fullName">Full Name</label><input type="text" id="fullName" name="fullName" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Enter full name" autocomplete="name" required></div>
+                <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Enter email" autocomplete="email" required></div>
+                <div class="form-group"><label for="password">Password</label><input type="password" id="password" name="password" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Create password" autocomplete="new-password" required></div>
+                <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Enter phone number" autocomplete="tel"></div>
+                <button type="submit" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-green-700 text-white hover:bg-green-800 focus-visible:ring-green-600 px-6 py-3 text-lg w-full">Create Worker Account</button>
+            </form>
+            <div class="text-center mt-4">Already registered? <a href="/Worker/Login">Worker Login</a></div>
+        </div>
+    </div>
+</div>

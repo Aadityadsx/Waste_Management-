@@ -1,49 +1,24 @@
-# Visual Studio
+# Dependencies
+node_modules/
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Runtime and test output
+*.log
+npm-debug.log*
+coverage/
+test-results/
+
+# Local database files and uploaded complaint photos
+*.mdf
+*.ldf
+Uploads/Complaints/
+
+# Editors and operating systems
 .vs/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-# Build output
-[Dd]ebug/
-[Rr]elease/
-[Bb]in/
-[Oo]bj/
-
-# NuGet packages
-packages/
-!packages/build/
-
-# Test results
-[Tt]est[Rr]esult*/
-*.trx
-
-# IDE and operating system files
-.vscode/
 .idea/
 .DS_Store
 Thumbs.db
-
-
-# Environment and secret files
-.env
-.env.*
-
-# Local database files
-*.mdf
-*.ldf
-
-# User-uploaded complaint photos
-Uploads/Complaints/
-
-# Environment and secret files
-.env
-.env.*
-
-# Local database files
-*.mdf
-*.ldf
-
-# User-uploaded complaint photos
-Uploads/Complaints/

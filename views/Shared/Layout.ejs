@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#14532d">
+    <title><%= title %> - Waste Management System</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+    <nav class="eco-navbar" aria-label="Main navigation">
+        <div class="navbar-container">
+            <a href="/" class="brand">♻️ Waste <span>Management</span></a>
+            <button class="nav-toggle" type="button" aria-controls="mainNavigation"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                ☰ Menu
+            </button>
+            <div class="nav-links" id="mainNavigation">
+                <a href="/">Home</a>
+                <a href="/Home/About">About</a>
+                <a href="/Home/Contact">Contact</a>
+                <div class="language-box">
+                    <select class="language-select" aria-label="Language">
+                        <option value="English">🌐 English</option>
+                        <option value="Marathi">🇮🇳 मराठी</option>
+                        <option value="Hindi">🇮🇳 हिंदी</option>
+                    </select>
+                </div>
+                <% if (!session.citizenId) { %>
+                    <a href="/Citizen/Login">Citizen Login</a>
+                    <a href="/Citizen/Register">Register</a>
+                <% } else { %>
+                    <a href="/Waste/MyComplaints">My Complaints</a>
+                    <a href="/Citizen/Logout">Logout</a>
+                <% } %>
+                <% if (!session.workerId) { %>
+                    <a href="/Worker/Login" class="nav-btn">Worker Login</a>
+                    <a href="/Worker/Register" class="nav-btn">Worker Register</a>
+                <% } else { %>
+                    <a href="/Worker/Dashboard" class="nav-btn">Worker Dashboard</a>
+                    <a href="/Worker/Logout" class="nav-btn">Worker Logout</a>
+                <% } %>
+                <a href="/Admin/Login">Admin</a>
+            </div>
+        </div>
+    </nav>
+    <main class="main-content">
+        <%- include('../' + page) %>
+    </main>
+    <footer class="eco-footer">
+        <p>♻️ <strong>Waste Management System</strong></p>
+        <p>Smart Waste Collection &amp; Tracking System</p>
+        <p>© <%= new Date().getFullYear() %> Waste Management System. All Rights Reserved.</p>
+    </footer>
+    <script src="/js/site.js"></script>
+</body>
+</html>

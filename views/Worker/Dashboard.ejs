@@ -1,0 +1,62 @@
+<div class="mx-auto w-full max-w-[1320px] px-4 sm:px-6 mt-4">
+    <header class="flex justify-between items-center mb-4">
+        <div><h2>👷 Worker Dashboard</h2><p class="text-slate-500">Welcome, <strong><%= session.workerName %></strong></p></div>
+        <a href="/Worker/Logout" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-red-700 text-white hover:bg-red-800 focus-visible:ring-red-600">Logout</a>
+    </header>
+    <% if (flash.successMessage) { %><div class="rounded-lg border p-6 border-green-200 bg-green-50 text-green-800"><%= flash.successMessage %></div><% } %>
+    <% if (flash.errorMessage) { %><div class="rounded-lg border p-6 border-red-200 bg-red-50 text-red-800"><%= flash.errorMessage %></div><% } %>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-12 mb-4">
+        <% [["Total Assigned", stats.total], ["Pending", stats.pending], ["In Progress", stats.inProgress], ["Collected", stats.collected]].forEach(([label, value]) => { %>
+            <div class="md:col-span-3 mb-3"><div class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 border-0"><div class="p-6 text-center"><h6><%= label %></h6><h2><%= value %></h2></div></div></div>
+        <% }); %>
+    </div>
+    <section class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200">
+        <header class="bg-green-700 px-12 py-4 text-white"><h4 class="mb-0">Assigned Complaints</h4></header>
+        <div class="p-6">
+            <% if (!complaints.length) { %><div class="rounded-lg border p-6 border-sky-200 bg-sky-50 text-sky-800">No complaints have been assigned to you yet.</div><% } else { %>
+                <div class="overflow-x-auto"><table class="w-full border-collapse text-left text-sm align-middle">
+                    <thead class="bg-green-50 text-green-900"><tr><th>Complaint ID</th><th>Citizen Name</th><th>Location</th><th>Waste Type</th><th>Description</th><th>Report Date</th><th>Status</th><th>GPS Verification</th></tr></thead>
+                    <tbody><% complaints.forEach(complaint => { %><tr>
+                        <td><strong>#<%= complaint.ComplaintID %></strong></td><td><%= complaint.Name %></td><td><%= complaint.Location %></td><td><%= complaint.WasteType %></td><td><%= complaint.Description %></td><td><%= dateLabel(complaint.ReportDate) %></td>
+                        <td><span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold <%= complaint.Status === 'Pending' ? 'bg-amber-400 text-slate-950' : complaint.Status === 'In Progress' ? 'bg-blue-700 text-white' : ['Collected','Resolved'].includes(complaint.Status) ? 'bg-green-700 text-white' : 'bg-slate-600 text-white' %> "><%= complaint.Status %></span></td>
+                        <td>
+                            <% if (complaint.LocationVerified) { %>
+                                <div class="rounded-lg border p-6 border-green-200 bg-green-50 text-green-800 p-2 mb-0"><strong>✓ GPS Verified</strong><% if (complaint.WorkerLatitude !== null && complaint.WorkerLongitude !== null) { %><br><small>Worker Location: <%= Number(complaint.WorkerLatitude).toFixed(6) %>, <%= Number(complaint.WorkerLongitude).toFixed(6) %></small><% } %></div>
+                            <% } else { %>
+                                <% if (complaint.Latitude === null || complaint.Longitude === null) { %><div class="text-sm text-slate-500 mb-2">Citizen GPS location is not available for this complaint.</div><% } %>
+                                <form action="/Worker/VerifyLocation" method="post" id="gpsForm_<%= complaint.ComplaintID %>">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="hidden" name="complaintId" value="<%= complaint.ComplaintID %>">
+                                    <input type="hidden" name="workerLatitude" id="latitude_<%= complaint.ComplaintID %>">
+                                    <input type="hidden" name="workerLongitude" id="longitude_<%= complaint.ComplaintID %>">
+                                    <button type="button" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-green-700 text-white hover:bg-green-800 focus-visible:ring-green-600 px-3 py-1.5 text-sm w-full gps-button" data-complaint-id="<%= complaint.ComplaintID %>">📍 Verify GPS &amp; Collect</button>
+                                </form>
+                                <div id="gpsStatus_<%= complaint.ComplaintID %>" class="text-sm text-slate-500 mt-2" role="status">GPS verification required</div>
+                            <% } %>
+                        </td>
+                    </tr><% }); %></tbody>
+                </table></div>
+            <% } %>
+        </div>
+    </section>
+</div>
+<script>
+    document.querySelectorAll(".gps-button").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const complaintId = this.dataset.complaintId;
+            const status = document.getElementById("gpsStatus_" + complaintId);
+            if (!navigator.geolocation) {
+                status.textContent = "GPS is not supported by this browser.";
+                return;
+            }
+            status.textContent = "Getting your current location...";
+            navigator.geolocation.getCurrentPosition(function (position) {
+                document.getElementById("latitude_" + complaintId).value = position.coords.latitude;
+                document.getElementById("longitude_" + complaintId).value = position.coords.longitude;
+                document.getElementById("gpsForm_" + complaintId).requestSubmit();
+            }, function () {
+                status.textContent = "Unable to capture location. Please allow location permission and try again.";
+            }, { enableHighAccuracy: true, timeout: 10000 });
+        });
+    });
+</script>

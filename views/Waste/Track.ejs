@@ -1,0 +1,15 @@
+<div class="track-container">
+    <section class="track-card">
+        <div class="track-icon">📍</div>
+        <h2>Track Your Complaint</h2>
+        <p>Enter your Complaint ID to check the current status.</p>
+        <% if (errorMessage) { %><div class="rounded-lg border p-6 border-red-200 bg-red-50 text-red-800 text-left"><%= errorMessage %></div><% } %>
+        <form method="post" action="/Waste/Track">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group"><label for="complaintId">Complaint ID</label><input type="number" min="1" id="complaintId" name="complaintId" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Enter Complaint ID" required></div>
+            <button type="submit" class="track-btn">Check Status</button>
+        </form>
+        <a href="/Waste/MyComplaints" class="back-link">View My Complaints</a>
+        <br><a href="/" class="back-link">← Back to Home</a>
+    </section>
+</div>

@@ -1,0 +1,20 @@
+<div class="mx-auto w-full max-w-[1320px] px-4 sm:px-6 mt-12">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-12 justify-center"><div class="md:col-span-7">
+        <section class="overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-200 shadow-lg">
+            <header class="bg-green-700 px-12 py-4 text-white text-center"><h3 class="mb-0">⭐ Give Your Feedback</h3></header>
+            <div class="p-6">
+                <% if (errorMessage) { %><div class="rounded-lg border p-6 border-red-200 bg-red-50 text-red-800"><%= errorMessage %></div><% } %>
+                <p class="text-center text-slate-500">How satisfied are you with the waste collection service?</p>
+                <form method="post" action="/Feedback/Create">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="complaintId" value="<%= complaintId %>">
+                    <fieldset class="text-center mb-4"><legend class="text-base"><strong>Rating</strong></legend>
+                        <% for (let rating = 1; rating <= 5; rating++) { %><label class="mx-2"><input type="radio" name="rating" value="<%= rating %>" <%= rating === 1 ? 'required' : '' %> aria-label="<%= rating %> stars"> <%= "⭐".repeat(rating) %></label><% } %>
+                    </fieldset>
+                    <div class="mb-4"><label class="mb-1 block text-sm font-semibold text-slate-700" for="comments"><strong>Your Comments</strong></label><textarea id="comments" name="comments" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-md placeholder:text-slate-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-200" rows="5" maxlength="4000" placeholder="Tell us about your experience..."></textarea></div>
+                    <div class="text-center"><button type="submit" class="inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-green-700 text-white hover:bg-green-800 focus-visible:ring-green-600 px-12">Submit Feedback</button></div>
+                </form>
+            </div>
+        </section>
+    </div></div>
+</div>
